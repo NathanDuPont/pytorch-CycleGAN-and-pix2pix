@@ -1,12 +1,15 @@
 import FaceDetector as fd
+import CycleGAN
 import os
 from options.test_options import TestOptions
 from data import create_dataset
 from models import create_model
+from util.visualizer import save_images
 import torch
 import torchvision
 import numpy as np
 from PIL import Image
+import matplotlib.pyplot as plt
 
 def cycle_gan_model(model):
     opt = TestOptions().parse()  # get test options
@@ -34,30 +37,13 @@ def image_to_cycleGAN_data(image):
 
 if __name__ == '__main__':
     face_detect = fd.FaceDetector('face-detection-model/deploy.prototxt.txt', 'face-detection-model/opencv_face_detector.caffemodel')
-    face = face_detect.detect_face_from_image('me.jpg')
-    face_data = image_to_cycleGAN_data(face)
+    face = face_detect.detect_face_from_image('imgs/face_before.jpg')
+    image = np.asarray(Image.open('imgs/yosemite.jpg'))
     
-    image = np.asarray(Image.open('yosemite.jpg'))
-    image_data = image_to_cycleGAN_data(image)
+    model = CycleGAN.CycleGAN('style_vangogh_pretrained')
 
-    style_models = ['style_monet_pretrained', 
-                    'style_vangogh_pretrained', 
-                    'style_ukiyoe_pretrained', 
-                    'style_cezanne_pretrained']
+    model.set_model_input(face)
 
-    for model in style_models:
-        cycle_gan = cycle_gan_model(model)     
-        print("Face Data Type: " + type(face_data))
-        cycle_gan.set_input(face_data)
-        cycle_gan.test()
-        result_image = cycle_gan.get_current_visuals()['fake']
-        torchvision.utils.save_image(result_image, f'me_{model}.jpg')
+    image = model.run_inference()
 
-        print("Image Data Type: " + type(face_data))
-        cycle_gan.set_input(image_data)
-        cycle_gan.test()
-        result_image = cycle_gan.get_current_visuals()['fake']
-        torchvision.utils.save_image(result_image, f'yosemite_{model}.jpg')
-
-
-    print('experiment complete')
+    torchvision.utils.save_image(image['fake'], 'output.jpg')

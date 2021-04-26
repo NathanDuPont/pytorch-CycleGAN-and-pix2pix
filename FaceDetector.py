@@ -17,6 +17,7 @@ class FaceDetector:
 
     def detect_face_from_image(self, path_to_image, confidence_threshold=0.7):
         image = cv2.imread(path_to_image)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         (h, w) = image.shape[:2]
         blob = cv2.dnn.blobFromImage(cv2.resize(image, (300, 300)), 1.0,
                                      (300, 300), (104.0, 177.0, 123.0))
