@@ -2,9 +2,9 @@ import torch
 import torchvision
 import numpy as np
 
-from options.test_options import TestOptions
-from data import create_dataset
-from models import create_model
+from .options.test_options import TestOptions
+from .data import create_dataset
+from .models import create_model
 
 class CycleGAN():
     def __init__(self, model_name: str):
