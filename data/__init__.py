@@ -12,7 +12,7 @@ See our template dataset class 'template_dataset.py' for more details.
 """
 import importlib
 import torch.utils.data
-from .base_dataset import BaseDataset
+from .base_dataset import BaseDataset, inheritsFromBaseDataset
 
 
 def find_dataset_using_name(dataset_name):
@@ -29,7 +29,7 @@ def find_dataset_using_name(dataset_name):
     target_dataset_name = dataset_name.replace('_', '') + 'dataset'
     for name, cls in datasetlib.__dict__.items():
         if name.lower() == target_dataset_name.lower() \
-           and issubclass(cls, BaseDataset):
+           and inheritsFromBaseDataset(cls):
             dataset = cls
 
     if dataset is None:

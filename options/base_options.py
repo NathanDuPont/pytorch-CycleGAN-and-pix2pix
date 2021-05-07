@@ -6,6 +6,13 @@ from ..models import get_option_setter as get_model_option_setter
 from ..data import get_option_setter as get_data_option_setter
 
 
+def inheritsFromBaseOptions(opt):
+    try:
+        return opt.inheritsFromBaseOptions()
+    except:
+        return False
+
+
 class BaseOptions():
     """This class defines options used during both training and test time.
 
@@ -17,13 +24,19 @@ class BaseOptions():
         """Reset the class; indicates the class hasn't been initailized"""
         self.initialized = False
 
+    def inheritsFromBaseOptions():
+        """
+        Used to allow for inheritance for relatively imported classes
+        """
+        return True
+
     def initialize(self, parser):
         """Define the common options that are used in both training and test."""
         # basic parameters
         parser.add_argument('--dataroot', required=False, type=str, default='./imgs', help='path to images (should have subfolders trainA, trainB, valA, valB, etc)')
         parser.add_argument('--name', type=str, default='style_vangogh_pretrained', help='name of the experiment. It decides where to store samples and models')
         parser.add_argument('--gpu_ids', type=str, default='0', help='gpu ids: e.g. 0  0,1,2, 0,2. use -1 for CPU')
-        parser.add_argument('--checkpoints_dir', type=str, default='./checkpoints', help='models are saved here')
+        parser.add_argument('--checkpoints_dir', type=str, default='./packages/cyclegan/checkpoints', help='models are saved here')
         # model parameters
         parser.add_argument('--model', type=str, default='test', help='chooses which model to use. [cycle_gan | pix2pix | test | colorization]')
         parser.add_argument('--input_nc', type=int, default=3, help='# of input image channels: 3 for RGB and 1 for grayscale')

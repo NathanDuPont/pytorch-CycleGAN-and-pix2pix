@@ -10,6 +10,13 @@ import torchvision.transforms as transforms
 from abc import ABC, abstractmethod
 
 
+def inheritsFromBaseDataset(dataset):
+    try:
+        return dataset.inheritsFromBaseDataset()
+    except:
+        return False
+
+
 class BaseDataset(data.Dataset, ABC):
     """This class is an abstract base class (ABC) for datasets.
 
@@ -28,6 +35,12 @@ class BaseDataset(data.Dataset, ABC):
         """
         self.opt = opt
         self.root = opt.dataroot
+
+    def inheritsFromBaseDataset():
+        """
+        Used to allow for inheritance for relatively imported classes
+        """
+        return True
 
     @staticmethod
     def modify_commandline_options(parser, is_train):

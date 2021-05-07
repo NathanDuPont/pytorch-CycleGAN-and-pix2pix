@@ -5,6 +5,13 @@ from abc import ABC, abstractmethod
 from . import networks
 
 
+def inheritsFromBaseModel(cls):
+    try:
+        return cls.inheritsFromBaseModel()
+    except:
+        return False
+
+
 class BaseModel(ABC):
     """This class is an abstract base class (ABC) for models.
     To create a subclass, you need to implement the following five functions:
@@ -42,6 +49,12 @@ class BaseModel(ABC):
         self.optimizers = []
         self.image_paths = []
         self.metric = 0  # used for learning rate policy 'plateau'
+
+    def inheritsFromBaseModel():
+        """
+        Used to allow for inheritance for relatively imported classes
+        """
+        return True
 
     @staticmethod
     def modify_commandline_options(parser, is_train):

@@ -19,7 +19,7 @@ See our template model class 'template_model.py' for more details.
 """
 
 import importlib
-from .base_model import BaseModel
+from .base_model import BaseModel, inheritsFromBaseModel
 
 
 def find_model_using_name(model_name):
@@ -34,11 +34,8 @@ def find_model_using_name(model_name):
     model = None
     target_model_name = model_name.replace('_', '') + 'model'
     for name, cls in modellib.__dict__.items():
-        print(f"Name: {name.lower()}")
-        print(f"Target Name: {target_model_name.lower()}")
-        print(f"Class: {cls}")
         if name.lower() == target_model_name.lower() \
-           and issubclass(cls, BaseModel):
+            and inheritsFromBaseModel(cls):
             model = cls
 
     if model is None:
